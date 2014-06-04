@@ -381,6 +381,7 @@
 				GCC_PREFIX_HEADER = "OAuth2_On_iOS_Spike/OAuth2_On_iOS_Spike-Prefix.pch";
 				INFOPLIST_FILE = "OAuth2_On_iOS_Spike/OAuth2_On_iOS_Spike-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -394,6 +395,7 @@
 				GCC_PREFIX_HEADER = "OAuth2_On_iOS_Spike/OAuth2_On_iOS_Spike-Prefix.pch";
 				INFOPLIST_FILE = "OAuth2_On_iOS_Spike/OAuth2_On_iOS_Spike-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

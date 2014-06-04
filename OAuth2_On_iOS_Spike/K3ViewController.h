@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface K3ViewController : UIViewController
-
+@interface K3ViewController : UIViewController <UIWebViewDelegate>
+{
+    NSMutableData *receivedData;
+}
+@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, retain) NSString *isLogin;
+@property (assign, nonatomic) Boolean isReader;
 @end
