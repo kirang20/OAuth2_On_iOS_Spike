@@ -1,5 +1,6 @@
 
 #import "K3ViewController.h"
+#import "JSONAPI.h"
 
 NSString *client_id = @"580593338579-khj8q25g7fnddm4485ug5e502elgccmb.apps.googleusercontent.com";
 NSString *secret = @"otEYv61tDK5rEefB-aezHKXv";
@@ -49,14 +50,58 @@ NSString *visibleactions = @"http://schemas.google.com/AddActivity";
             NSString* key = [keyValue objectAtIndex:0];
             if ([key isEqualToString:@"code"]) {
                 verifier = [keyValue objectAtIndex:1];
-                
-                NSLog(@"Code: %@",verifier);
+                NSLog(@"Code:  %@",verifier);
                 break;
             }
         }
+        
+        if (verifier) {
+            NSString *data = [NSString stringWithFormat:@"code=%@&client_id=%@&client_secret=%@&redirect_uri=%@&grant_type=authorization_code", verifier,client_id,secret,callbakc];
+            NSString *url = [NSString stringWithFormat:@"https://accounts.google.com/o/oauth2/token"];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+            [request setHTTPMethod:@"POST"];
+            [request setHTTPBody:[data dataUsingEncoding:NSUTF8StringEncoding]];
+            NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:request delegate:self];
+            receivedData = [[NSMutableData alloc] init];
+            
+            [webView removeFromSuperview];
+            
+            return NO;
+            
+        }
     }
-    
     return YES;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+
+{
+    [receivedData appendData:data];
+    NSLog(@"verifier %@",receivedData);
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                    message:[NSString stringWithFormat:@"%@", error]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    NSString *response = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+    JSONAPI *jsonApi = [JSONAPI JSONAPIWithString:response];
+    NSString *token = [jsonApi objectForKey:@"access_token"];
+    
+    UIAlertView *alertView = [[UIAlertView alloc]
+                              initWithTitle:@"Google Access TOken"
+                              message:token
+                              delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+    [alertView show];
 }
 
 @end
